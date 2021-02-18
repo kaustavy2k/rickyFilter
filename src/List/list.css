@@ -1,0 +1,42 @@
+h3 {
+  padding-top: 5px;
+  font-size: 15px;
+}
+.listings {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.image {
+  width: 30px;
+  border-radius: 100px;
+  margin-right: 10px;
+  margin-left: 15px;
+}
+.info {
+  display: flex;
+  align-items: center;
+  min-width: 260px;
+  margin-right: 50px;
+}
+.list {
+  height: 60px;
+  background-color: white;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+}
+.dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 100px;
+  background-color: red;
+  margin-right: 5px;
+  margin-top: -5px;
+}
