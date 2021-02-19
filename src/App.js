@@ -5,74 +5,95 @@ import { Input } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 import List from "./List/list";
+import initialList from "./List/initialList";
 
 function App() {
   let initialRender = useRef(false);
+  let loadingRef = useRef();
+  let windowRef = useRef();
   const [enteredFilter, setEnteredFilter] = useState("");
-  const [enteredList, setEnteredList] = useState([
-    {
-      className: "list",
-      image: "https://rickandmortyapi.com/api/character/avatar/180.jpeg",
-      name: "Jessica",
-      status: "Alive",
-      species: "Cronenberg",
-    },
-    {
-      className: "list",
-      image: "https://rickandmortyapi.com/api/character/avatar/380.jpeg",
-      name: "Weird Rick",
-      status: "Unknown",
-      species: "Human",
-    },
-    {
-      className: "list",
-      image: "https://rickandmortyapi.com/api/character/avatar/608.jpeg",
-      name: "Jesus Christ",
-      status: "Alive",
-      species: "Human",
-    },
-    {
-      className: "list",
-      image: "https://rickandmortyapi.com/api/character/avatar/664.jpeg",
-      name: "Ticktock",
-      status: "Unknown",
-      species: "Humanoid",
-    },
-  ]);
+  const [enteredList, setEnteredList] = useState(initialList);
+  const [currmaxpage, setcurrmaxpage] = useState({ curr: 1, maxpage: null });
+  const [loading, setloading] = useState({ condition: false, msg: "Loading" });
 
+  //fetch names
+  const getName = (names, pages, signal) => {
+    setloading({ condition: true, msg: "Loading" });
+    axios
+      .get(
+        `https://rickandmortyapi.com/api/character/?name=${names}&page=${pages}`
+      )
+      .then((res) => res.data)
+      .then((data) => {
+        if (signal) {
+          setEnteredList([...enteredList, ...data.results]);
+          setcurrmaxpage((page) => ({ ...page, curr: pages }));
+        } else {
+          setEnteredList(data.results);
+          setcurrmaxpage((page) => ({ curr: 1, maxpage: data.info.pages + 1 }));
+          setloading({ condition: false, msg: "Loading" });
+        }
+      })
+      .catch((err) => {
+        return;
+      });
+  };
+
+  //debouncing the api
   useEffect(() => {
     if (initialRender.current) {
-      console.log("hi");
-      const timer = setTimeout(() => {
-        axios
-          .get(
-            `https://rickandmortyapi.com/api/character/?name=${enteredFilter}&page=1`
-          )
-          .then((res) => res.data)
-          .then((data) => {
-            setEnteredList(data.results);
-          });
-      }, 500);
-      return () => {
-        clearTimeout(timer);
-      };
+      if (enteredFilter) {
+        const timer = setTimeout(() => {
+          getName(enteredFilter, 1, 0);
+        }, 500);
+        return () => {
+          clearTimeout(timer);
+        };
+      } else {
+        setEnteredList(initialList);
+      }
     } else {
       initialRender.current = true;
     }
   }, [enteredFilter]);
+
+  //observer API
+  useEffect(() => {
+    let options = {
+      root: windowRef.current,
+      rootMargin: "0px",
+      threshold: 1.0,
+    };
+
+    const observer = new IntersectionObserver((entities, observer) => {
+      const first = entities[0];
+      if (first.isIntersecting) {
+        const nextPage = currmaxpage.curr + 1;
+        if (nextPage < currmaxpage.maxpage && enteredFilter) {
+          getName(enteredFilter, nextPage, 1);
+        } else {
+          setloading({ condition: false, msg: "End of Results" });
+        }
+      }
+    }, options);
+    observer.observe(loadingRef.current);
+    return () => observer.unobserve(loadingRef.current);
+  }, [enteredList, currmaxpage]);
+
   let displaylist = enteredList.map((item, i) => {
     return (
       <List
         key={i}
-        className="list"
-        src={item.image}
+        image={item.image}
         name={item.name}
         status={item.status}
-        spi={item.species}
+        species={item.species}
+        origin={item.origin.name}
+        gender={item.gender}
+        location={item.location.name}
       ></List>
     );
   });
-  console.log(displaylist);
 
   return (
     <div className="App">
@@ -86,8 +107,12 @@ function App() {
           placeholder="Search here"
           prefix={<SearchOutlined />}
         />
-        <div className="listings"></div>
+      </div>
+      <div ref={windowRef} className="listings">
         {displaylist}
+        <div ref={loadingRef}>
+          <span>{loading.msg}...</span>
+        </div>
       </div>
     </div>
   );

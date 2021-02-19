@@ -4,11 +4,9 @@ h3 {
 }
 .listings {
   margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+ overflow: scroll;
+  width: 470px;
+  max-height: 300px;
 }
 .image {
   width: 30px;
@@ -25,7 +23,7 @@ h3 {
 .list {
   height: 60px;
   background-color: white;
-  margin: 5px;
+  margin-top: 10px;
   display: flex;
   align-items: center;
   width: 100%;

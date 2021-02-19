@@ -1,0 +1,43 @@
+const initialList = [
+  {
+    className: "list",
+    image: "https://rickandmortyapi.com/api/character/avatar/180.jpeg",
+    name: "Jessica",
+    status: "Alive",
+    species: "Cronenberg",
+    origin: { name: "Earth (C-137)" },
+    gender: "Female",
+    location: { name: "Earth (C-137)" },
+  },
+  {
+    className: "list",
+    image: "https://rickandmortyapi.com/api/character/avatar/380.jpeg",
+    name: "Weird Rick",
+    status: "Unknown",
+    species: "Human",
+    origin: { name: "unknown" },
+    gender: "Male",
+    location: { name: "unknown" },
+  },
+  {
+    className: "list",
+    image: "https://rickandmortyapi.com/api/character/avatar/608.jpeg",
+    name: "Jesus Christ",
+    status: "Alive",
+    species: "Human",
+    origin: { name: "Ricks’s Story" },
+    gender: "Male",
+    location: { name: "Ricks’s Story" },
+  },
+  {
+    className: "list",
+    image: "https://rickandmortyapi.com/api/character/avatar/664.jpeg",
+    name: "Ticktock",
+    status: "Unknown",
+    species: "Humanoid",
+    origin: { name: "Gaia" },
+    gender: "Genderless",
+    location: { name: "Gaia" },
+  },
+];
+export default initialList;
