@@ -97,21 +97,23 @@ function App() {
 
   return (
     <div className="App">
-      <div className="heading">
-        <h1>Rick and Morty Search</h1>
-      </div>
-      <div className="search">
-        <Input
-          onChange={(event) => setEnteredFilter(event.target.value)}
-          size="large"
-          placeholder="Search here"
-          prefix={<SearchOutlined />}
-        />
-      </div>
-      <div ref={windowRef} className="listings">
-        {displaylist}
-        <div ref={loadingRef}>
-          <span>{loading.msg}...</span>
+      <div className="wrapper">
+        <div className="heading">
+          <h1>Rick and Morty Search</h1>
+        </div>
+        <div className="search">
+          <Input
+            onChange={(event) => setEnteredFilter(event.target.value)}
+            size="large"
+            placeholder="Search here"
+            prefix={<SearchOutlined />}
+          />
+        </div>
+        <div ref={windowRef} className="listings">
+          {displaylist}
+          <div ref={loadingRef}>
+            <span>{loading.msg}...</span>
+          </div>
         </div>
       </div>
     </div>

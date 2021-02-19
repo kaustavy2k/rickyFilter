@@ -18,9 +18,11 @@ const List = React.memo((props) => {
           <img className="image" src={props.image} />
           <h3>{props.name}</h3>
         </div>
-        <span className="dot"></span>
-        <h3>{props.status}-</h3>
-        <h3>{props.species}</h3>
+        <div className="info2">
+          <span className="dot"></span>
+          <h3>{props.status}-</h3>
+          <h3>{props.species}</h3>
+        </div>
       </div>
       {modalShow ? (
         <Suspense fallback={<div>Loading...</div>}>
